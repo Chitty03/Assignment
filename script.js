@@ -3,23 +3,25 @@ let globalData = [];
 
 // Load CSV data with exact column headers
 function loadData(callback) {
-  if (!dataLoaded) {
-    d3.csv("Combined_Data.csv", d => ({
-      Country: d["Country"],
-      Gini_Index: +d["Income Inequality(Gini Index)"],
-      Life_Expectancy: +d["Life expectancy(Number of Years)"],
-      Infant_Mortality: +d["Infant Mortality Deaths Per 1000 live births"]
-    })).then(data => {
-      globalData = data;
-      dataLoaded = true;
+    if (!dataLoaded) {
+      d3.csv("Combined_Data.csv", d => ({
+        Country: d["Country"],
+        Gini_Index: +d["Gini_Index"],
+        Life_Expectancy: +d["Life_Expectancy"],
+        Infant_Mortality: +d["Infant_Mortality"]
+      })).then(data => {
+        globalData = data;
+        dataLoaded = true;
+        console.log("Data loaded:", globalData);  // Check data in the console
+        callback();
+      }).catch(error => {
+        console.error("Error loading data:", error);
+      });
+    } else {
       callback();
-    }).catch(error => {
-      console.error("Error loading data:", error);
-    });
-  } else {
-    callback();
+    }
   }
-}
+  
 
 // Helper function for tooltips
 function showTooltip(content, event) {
@@ -71,37 +73,53 @@ function createChoroplethMap() {
 
 // Bar Chart
 function createBarChart() {
-    // Hardcoded example data
-    const exampleData = [
-      { Country: "Country A", Gini_Index: 0.4, Life_Expectancy: 80, Infant_Mortality: 2 },
-      { Country: "Country B", Gini_Index: 0.35, Life_Expectancy: 82, Infant_Mortality: 3 },
-      { Country: "Country C", Gini_Index: 0.45, Life_Expectancy: 78, Infant_Mortality: 5 }
-    ];
-  
+  loadData(() => {
     const svg = d3.select("#barChart").append("svg").attr("width", 800).attr("height", 500);
-    const x = d3.scaleBand().domain(exampleData.map(d => d.Country)).range([0, 800]).padding(0.1);
-    const y = d3.scaleLinear().domain([0, 90]).range([500, 0]);
-  
+    const x = d3.scaleBand().domain(globalData.map(d => d.Country)).range([0, 800]).padding(0.1);
+    const y = d3.scaleLinear().domain([0, d3.max(globalData, d => d.Life_Expectancy)]).range([500, 0]);
+    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
+
     svg.selectAll("rect")
-       .data(exampleData)
+       .data(globalData)
        .enter().append("rect")
        .attr("x", d => x(d.Country))
        .attr("y", d => y(d.Life_Expectancy))
        .attr("width", x.bandwidth())
        .attr("height", d => 500 - y(d.Life_Expectancy))
-       .attr("fill", "steelblue");
-  
+       .attr("fill", d => colorScale(d.Gini_Index))
+       .on("mousemove", (event, d) => {
+         const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
+                                 <strong>Gini Index:</strong> ${d.Gini_Index}<br>
+                                 <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
+                                 <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
+         showTooltip(tooltipContent, event);
+       })
+       .on("mouseout", hideTooltip);
+
     svg.append("g")
        .attr("transform", "translate(0,500)")
-       .call(d3.axisBottom(x))
+       .call(d3.axisBottom(x).tickFormat(d => d).ticks(5))
        .selectAll("text")
        .attr("transform", "rotate(-45)")
        .style("text-anchor", "end");
-  
+
     svg.append("g")
        .call(d3.axisLeft(y));
-  }
-  
+
+    svg.append("text")
+       .attr("class", "axis-label")
+       .attr("x", -250)
+       .attr("y", 20)
+       .attr("transform", "rotate(-90)")
+       .text("Life Expectancy (Years)");
+
+    svg.append("text")
+       .attr("class", "axis-label")
+       .attr("x", 400)
+       .attr("y", 540)
+       .text("Country");
+  });
+}
 
 // Scatter Plot
 function createScatterPlot() {

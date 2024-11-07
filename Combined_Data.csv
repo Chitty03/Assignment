@@ -1,4 +1,4 @@
-﻿Country,Income Inequality(Gini Index),Life expectancy(Number of Years,Infant Mortality Deaths Per 1000 live births
+﻿Country,Gini_Index,Life_Expectancy,Infant_Mortality
 Costa Rica,0.487,84.5,9
 Türkiye,0.433,83.6,8.7
 Lithuania,0.366,83.3,4.9
