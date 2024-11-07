@@ -356,25 +356,54 @@ function createScatterPlot() {
 // Line Chart
 function createLineChart() {
   loadData(() => {
-    const width = 800, height = 500, margin = { top: 20, right: 20, bottom: 80, left: 60 };
-    const svg = d3.select("#lineChart").append("svg").attr("width", width).attr("height", height);
-    
-    const x = d3.scalePoint().domain(globalData.map(d => d.Country)).range([margin.left, width - margin.right]);
-    const y = d3.scaleLinear().domain([0, d3.max(globalData, d => d.Infant_Mortality) + 1]).nice().range([height - margin.bottom, margin.top]);
+    const width = 900, height = 500, margin = { top: 50, right: 30, bottom: 100, left: 60 };
+    const svg = d3.select("#lineChart").append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
 
+    // Scales
+    const x = d3.scalePoint()
+                .domain(globalData.map(d => d.Country))
+                .range([margin.left, width - margin.right])
+                .padding(0.5);
+
+    const y = d3.scaleLinear()
+                .domain([0, d3.max(globalData, d => d.Infant_Mortality) + 1])
+                .nice()
+                .range([height - margin.bottom, margin.top]);
+
+    // Axes
+    svg.append("g")
+       .attr("transform", `translate(0,${height - margin.bottom})`)
+       .call(d3.axisBottom(x))
+       .selectAll("text")
+       .attr("transform", "rotate(-45)")
+       .style("text-anchor", "end")
+       .style("font-size", "10px");
+
+    svg.append("g")
+       .attr("transform", `translate(${margin.left},0)`)
+       .call(d3.axisLeft(y));
+
+    // Gridlines
+    svg.append("g")
+       .attr("class", "grid")
+       .attr("transform", `translate(${margin.left},0)`)
+       .call(d3.axisLeft(y).ticks(5).tickSize(-width + margin.left + margin.right).tickFormat(""));
+
+    // Line
     const line = d3.line()
                    .x(d => x(d.Country))
                    .y(d => y(d.Infant_Mortality));
 
-    // Draw the line
     svg.append("path")
        .datum(globalData)
        .attr("fill", "none")
-       .attr("stroke", "blue")
+       .attr("stroke", "steelblue")
        .attr("stroke-width", 2)
        .attr("d", line);
 
-    // Add circles for each point
+    // Data points
     svg.selectAll("circle")
        .data(globalData)
        .enter().append("circle")
@@ -384,41 +413,46 @@ function createLineChart() {
        .attr("fill", "black")
        .on("mousemove", (event, d) => {
          const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
-                                 <strong>Infant Mortality:</strong> ${d.Infant_Mortality}<br>
-                                 <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
-                                 <strong>Gini Index:</strong> ${d.Gini_Index}`;
+                                 <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
          showTooltip(tooltipContent, event);
        })
        .on("mouseout", hideTooltip);
 
-    // X-axis and Y-axis
-    svg.append("g")
-       .attr("transform", `translate(0,${height - margin.bottom})`)
-       .call(d3.axisBottom(x).tickSizeOuter(0))
-       .selectAll("text")
-       .attr("transform", "rotate(-45)")
-       .style("text-anchor", "end");
-
-    svg.append("g")
-       .attr("transform", `translate(${margin.left},0)`)
-       .call(d3.axisLeft(y).ticks(5));
-
-    // Labels
+    // Title and Subtitle
     svg.append("text")
-       .attr("class", "axis-label")
-       .attr("x", -250)
-       .attr("y", 20)
-       .attr("transform", "rotate(-90)")
-       .text("Infant Mortality (per 1000 live births)");
-
-    svg.append("text")
-       .attr("class", "axis-label")
        .attr("x", width / 2)
-       .attr("y", height - 40)
+       .attr("y", margin.top / 2)
        .attr("text-anchor", "middle")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .text("Line Chart: Infant Mortality by Country");
+
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", margin.top)
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
+       .style("fill", "gray")
+       .text("Each point represents the infant mortality rate per 1000 live births");
+
+    // Axis Labels
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", height - 20)
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
        .text("Country");
+
+    svg.append("text")
+       .attr("x", -height / 2)
+       .attr("y", 20)
+       .attr("text-anchor", "middle")
+       .attr("transform", "rotate(-90)")
+       .style("font-size", "12px")
+       .text("Infant Mortality (per 1000 live births)");
   });
 }
+
 
   
   // Dual-Axis Chart for Life Expectancy and Infant Mortality
