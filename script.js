@@ -37,7 +37,7 @@ function hideTooltip() {
 }
 
 // Choropleth Map
-function createChoroplethMap() {
+function createEnhancedChoroplethMap() {
   loadData(() => {
     const width = 1000, height = 500;
     const svg = d3.select("#mapChart").append("svg")
@@ -46,26 +46,6 @@ function createChoroplethMap() {
                   
     const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
     const path = d3.geoPath().projection(projection);
-
-    // Improved color scale for better contrast
-    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
-
-    // Title
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 30)
-       .attr("text-anchor", "middle")
-       .style("font-size", "20px")
-       .style("font-weight", "bold")
-       .text("Choropleth Map: Gini Index by Country");
-
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 50)
-       .attr("text-anchor", "middle")
-       .style("font-size", "12px")
-       .style("fill", "gray")
-       .text("Income inequality represented by the Gini Index across different countries");
 
     // World map data
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
@@ -96,45 +76,64 @@ function createChoroplethMap() {
              showTooltip(tooltipContent, event);
            }
          });
+
+      // Adding title and subtitle after map to ensure visibility
+      svg.append("text")
+         .attr("x", width / 2)
+         .attr("y", 30)
+         .attr("text-anchor", "middle")
+         .style("font-size", "20px")
+         .style("font-weight", "bold")
+         .text("Choropleth Map: Gini Index by Country");
+
+      svg.append("text")
+         .attr("x", width / 2)
+         .attr("y", 50)
+         .attr("text-anchor", "middle")
+         .style("font-size", "12px")
+         .style("fill", "gray")
+         .text("Income inequality represented by the Gini Index across different countries");
+
+      // Enhanced Legend Placement
+      const legendWidth = 200, legendHeight = 10;
+      const legend = svg.append("g").attr("transform", `translate(${width - 250}, 100)`);
+
+      // Gradient for legend
+      const defs = svg.append("defs");
+      const linearGradient = defs.append("linearGradient")
+                                 .attr("id", "legendGradient");
+
+      linearGradient.selectAll("stop")
+                    .data(colorScale.ticks(10).map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: colorScale(t) })))
+                    .enter().append("stop")
+                    .attr("offset", d => d.offset)
+                    .attr("stop-color", d => d.color);
+
+      legend.append("rect")
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
+            .style("fill", "url(#legendGradient)")
+            .style("stroke", "#ccc")
+            .style("stroke-width", 0.5);
+
+      // Legend Scale
+      const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, legendWidth]);
+      const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(".2f"));
+      legend.append("g").attr("transform", `translate(0,${legendHeight})`).call(legendAxis);
+
+      legend.append("text")
+            .attr("x", legendWidth / 2)
+            .attr("y", -10)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "#333")
+            .text("Gini Index");
     });
-
-    // Enhanced Legend Placement
-    const legendWidth = 200, legendHeight = 10;
-    const legend = svg.append("g").attr("transform", `translate(${width - 250}, 100)`);
-
-    // Gradient for legend
-    const defs = svg.append("defs");
-    const linearGradient = defs.append("linearGradient")
-                               .attr("id", "legendGradient");
-
-    linearGradient.selectAll("stop")
-                  .data(colorScale.ticks(10).map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: colorScale(t) })))
-                  .enter().append("stop")
-                  .attr("offset", d => d.offset)
-                  .attr("stop-color", d => d.color);
-
-    legend.append("rect")
-          .attr("width", legendWidth)
-          .attr("height", legendHeight)
-          .style("fill", "url(#legendGradient)")
-          .style("stroke", "#ccc")
-          .style("stroke-width", 0.5);
-
-    // Legend Scale
-    const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, legendWidth]);
-    const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(".2f"));
-    legend.append("g").attr("transform", `translate(0,${legendHeight})`).call(legendAxis);
-
-    legend.append("text")
-          .attr("x", legendWidth / 2)
-          .attr("y", -10)
-          .attr("text-anchor", "middle")
-          .style("font-size", "12px")
-          .style("fill", "#333")
-          .text("Gini Index");
-
   });
 }
+
+// Call the function to render the enhanced choropleth map
+createEnhancedChoroplethMap();
 
 
 
