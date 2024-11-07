@@ -253,6 +253,40 @@ function createBarChart() {
   });
 }
 
+function createScatterPlot() {
+  loadData(() => {
+    const width = 800, height = 500, margin = { top: 20, right: 20, bottom: 50, left: 60 };
+    const svg = d3.select("#scatterPlot").append("svg").attr("width", width).attr("height", height);
+    const x = d3.scaleLinear().domain([0.2, 0.5]).range([margin.left, width - margin.right]);
+    const y = d3.scaleLinear().domain([70, 90]).range([height - margin.bottom, margin.top]);
+    const sizeScale = d3.scaleSqrt().domain([0, 10]).range([3, 15]);
+
+    svg.selectAll("circle")
+       .data(globalData)
+       .enter().append("circle")
+       .attr("cx", d => x(d.Gini_Index))
+       .attr("cy", d => y(d.Life_Expectancy))
+       .attr("r", d => sizeScale(d.Infant_Mortality))
+       .attr("fill", "#69b3a2")
+       .on("mousemove", (event, d) => {
+         const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
+                                 <strong>Gini Index:</strong> ${d.Gini_Index}<br>
+                                 <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
+                                 <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
+         showTooltip(tooltipContent, event);
+       })
+       .on("mouseout", hideTooltip);
+
+    svg.append("g")
+       .attr("transform", `translate(0,${height - margin.bottom})`)
+       .call(d3.axisBottom(x).tickFormat(d3.format(".2f")));
+
+    svg.append("g")
+       .attr("transform", `translate(${margin.left},0)`)
+       .call(d3.axisLeft(y));
+  });
+}
+
 
 
 
