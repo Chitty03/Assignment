@@ -141,12 +141,31 @@ function createChoroplethMap() {
 // Bar Chart
 function createBarChart() {
   loadData(() => {
-    const width = 800, height = 500, margin = { top: 20, right: 20, bottom: 120, left: 60 };
-    const svg = d3.select("#barChart").append("svg").attr("width", width).attr("height", height);
-    const x = d3.scaleBand().domain(globalData.map(d => d.Country)).range([margin.left, width - margin.right]).padding(0.2);
-    const y = d3.scaleLinear().domain([0, d3.max(globalData, d => d.Life_Expectancy) + 10]).nice().range([height - margin.bottom, margin.top]);
-    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
+    const width = 900, height = 500;
+    const margin = { top: 50, right: 20, bottom: 150, left: 60 };
 
+    const svg = d3.select("#barChart").append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+
+    // Sort data by Life Expectancy for better readability
+    globalData.sort((a, b) => b.Life_Expectancy - a.Life_Expectancy);
+
+    // Scales
+    const x = d3.scaleBand()
+                .domain(globalData.map(d => d.Country))
+                .range([margin.left, width - margin.right])
+                .padding(0.2);
+
+    const y = d3.scaleLinear()
+                .domain([0, d3.max(globalData, d => d.Life_Expectancy) + 5])
+                .nice()
+                .range([height - margin.bottom, margin.top]);
+
+    const colorScale = d3.scaleSequential(d3.interpolateBlues)
+                         .domain([0.2, 0.5]);
+
+    // Bars
     svg.selectAll("rect")
        .data(globalData)
        .enter().append("rect")
@@ -164,52 +183,76 @@ function createBarChart() {
        })
        .on("mouseout", hideTooltip);
 
-    svg.append("g")
-       .attr("transform", `translate(0,${height - margin.bottom})`)
-       .call(d3.axisBottom(x)).selectAll("text")
-       .attr("transform", "rotate(-45)")
-       .style("text-anchor", "end");
-
-    svg.append("g")
-       .attr("transform", `translate(${margin.left},0)`)
-       .call(d3.axisLeft(y));
-  });
-}
-
-// Scatter-Plot
-function createScatterPlot() {
-  loadData(() => {
-    const width = 800, height = 500, margin = { top: 20, right: 20, bottom: 50, left: 60 };
-    const svg = d3.select("#scatterPlot").append("svg").attr("width", width).attr("height", height);
-    const x = d3.scaleLinear().domain([0.2, 0.5]).range([margin.left, width - margin.right]);
-    const y = d3.scaleLinear().domain([70, 90]).range([height - margin.bottom, margin.top]);
-    const sizeScale = d3.scaleSqrt().domain([0, 10]).range([3, 15]);
-
-    svg.selectAll("circle")
+    // Value Labels on top of bars
+    svg.selectAll(".label")
        .data(globalData)
-       .enter().append("circle")
-       .attr("cx", d => x(d.Gini_Index))
-       .attr("cy", d => y(d.Life_Expectancy))
-       .attr("r", d => sizeScale(d.Infant_Mortality))
-       .attr("fill", "#69b3a2")
-       .on("mousemove", (event, d) => {
-         const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
-                                 <strong>Gini Index:</strong> ${d.Gini_Index}<br>
-                                 <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
-                                 <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
-         showTooltip(tooltipContent, event);
-       })
-       .on("mouseout", hideTooltip);
+       .enter().append("text")
+       .attr("class", "label")
+       .attr("x", d => x(d.Country) + x.bandwidth() / 2)
+       .attr("y", d => y(d.Life_Expectancy) - 5)
+       .attr("text-anchor", "middle")
+       .style("font-size", "10px")
+       .style("fill", "#333")
+       .text(d => d.Life_Expectancy.toFixed(1));
 
+    // X Axis
     svg.append("g")
        .attr("transform", `translate(0,${height - margin.bottom})`)
-       .call(d3.axisBottom(x).tickFormat(d3.format(".2f")));
+       .call(d3.axisBottom(x).tickSizeOuter(0))
+       .selectAll("text")
+       .attr("transform", "rotate(-45)")
+       .attr("dy", "0.75em")
+       .attr("dx", "-0.75em")
+       .style("text-anchor", "end")
+       .style("font-size", "10px");
 
+    // Y Axis
     svg.append("g")
        .attr("transform", `translate(${margin.left},0)`)
-       .call(d3.axisLeft(y));
+       .call(d3.axisLeft(y).ticks(5))
+       .selectAll("text")
+       .style("font-size", "10px");
+
+    // Y Axis Label
+    svg.append("text")
+       .attr("class", "axis-label")
+       .attr("x", -height / 2)
+       .attr("y", 15)
+       .attr("transform", "rotate(-90)")
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
+       .style("fill", "#333")
+       .text("Life Expectancy (Years)");
+
+    // X Axis Label
+    svg.append("text")
+       .attr("class", "axis-label")
+       .attr("x", width / 2)
+       .attr("y", height - 100)
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
+       .style("fill", "#333")
+       .text("Country");
+
+    // Title
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", 25)
+       .attr("text-anchor", "middle")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .text("Bar Chart: Life Expectancy with Gini Index and Infant Mortality");
+
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", 45)
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
+       .style("fill", "gray")
+       .text("Sorted by Life Expectancy for Enhanced Comparison");
   });
 }
+
 
 
 
