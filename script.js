@@ -37,7 +37,7 @@ function hideTooltip() {
 }
 
 // Choropleth Map
-function createEnhancedChoroplethMap() {
+function createChoroplethMap() {
   loadData(() => {
     const width = 800, height = 500;
     const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
