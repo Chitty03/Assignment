@@ -34,11 +34,13 @@ body {
   
   .tooltip {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 5px;
+    padding: 8px;
     border-radius: 5px;
     font-size: 12px;
     pointer-events: none;
+    z-index: 10;
   }
+  
   
