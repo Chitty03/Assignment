@@ -3,22 +3,23 @@ let globalData = [];
 
 // Load CSV data once and store it globally
 function loadData(callback) {
-  if (!dataLoaded) {
-    d3.csv("Combined_Data.csv", d => ({
-      Country: d.Country,
-      Gini_Index: +d.Gini_Index,
-      Life_Expectancy: +d.Life_Expectancy,
-      Infant_Mortality: +d.Infant_Mortality
-    })).then(data => {
-      globalData = data;
-      dataLoaded = true;
-      console.log(globalData);  // Log to verify data loading
+    if (!dataLoaded) {
+      d3.csv("Combined_Data.csv", d => ({
+        Country: d.Country,
+        Gini_Index: +d.Gini_Index,
+        Life_Expectancy: +d.Life_Expectancy,
+        Infant_Mortality: +d.Infant_Mortality
+      })).then(data => {
+        globalData = data;
+        dataLoaded = true;
+        console.log("Loaded data:", globalData);  // Check if data is loaded
+        callback();
+      });
+    } else {
       callback();
-    });
-  } else {
-    callback();
+    }
   }
-}
+  
 
 // Choropleth Map with Gini Index, Life Expectancy, and Infant Mortality
 function createChoroplethMap() {
