@@ -71,53 +71,37 @@ function createChoroplethMap() {
 
 // Bar Chart
 function createBarChart() {
-  loadData(() => {
+    // Hardcoded example data
+    const exampleData = [
+      { Country: "Country A", Gini_Index: 0.4, Life_Expectancy: 80, Infant_Mortality: 2 },
+      { Country: "Country B", Gini_Index: 0.35, Life_Expectancy: 82, Infant_Mortality: 3 },
+      { Country: "Country C", Gini_Index: 0.45, Life_Expectancy: 78, Infant_Mortality: 5 }
+    ];
+  
     const svg = d3.select("#barChart").append("svg").attr("width", 800).attr("height", 500);
-    const x = d3.scaleBand().domain(globalData.map(d => d.Country)).range([0, 800]).padding(0.1);
-    const y = d3.scaleLinear().domain([0, d3.max(globalData, d => d.Life_Expectancy)]).range([500, 0]);
-    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
-
+    const x = d3.scaleBand().domain(exampleData.map(d => d.Country)).range([0, 800]).padding(0.1);
+    const y = d3.scaleLinear().domain([0, 90]).range([500, 0]);
+  
     svg.selectAll("rect")
-       .data(globalData)
+       .data(exampleData)
        .enter().append("rect")
        .attr("x", d => x(d.Country))
        .attr("y", d => y(d.Life_Expectancy))
        .attr("width", x.bandwidth())
        .attr("height", d => 500 - y(d.Life_Expectancy))
-       .attr("fill", d => colorScale(d.Gini_Index))
-       .on("mousemove", (event, d) => {
-         const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
-                                 <strong>Gini Index:</strong> ${d.Gini_Index}<br>
-                                 <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
-                                 <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
-         showTooltip(tooltipContent, event);
-       })
-       .on("mouseout", hideTooltip);
-
+       .attr("fill", "steelblue");
+  
     svg.append("g")
        .attr("transform", "translate(0,500)")
-       .call(d3.axisBottom(x).tickFormat(d => d).ticks(5))
+       .call(d3.axisBottom(x))
        .selectAll("text")
        .attr("transform", "rotate(-45)")
        .style("text-anchor", "end");
-
+  
     svg.append("g")
        .call(d3.axisLeft(y));
-
-    svg.append("text")
-       .attr("class", "axis-label")
-       .attr("x", -250)
-       .attr("y", 20)
-       .attr("transform", "rotate(-90)")
-       .text("Life Expectancy (Years)");
-
-    svg.append("text")
-       .attr("class", "axis-label")
-       .attr("x", 400)
-       .attr("y", 540)
-       .text("Country");
-  });
-}
+  }
+  
 
 // Scatter Plot
 function createScatterPlot() {
