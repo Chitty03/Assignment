@@ -132,14 +132,6 @@ function createEnhancedChoroplethMap() {
   });
 }
 
-// Call the function to render the enhanced choropleth map
-createEnhancedChoroplethMap();
-
-
-
-
-
-
 
 // Bar Chart
 function createBarChart() {
