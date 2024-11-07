@@ -136,6 +136,7 @@ function createChoroplethMap() {
 
 
 
+
 // Bar Chart
 function createBarChart() {
   loadData(() => {
