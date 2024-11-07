@@ -3,32 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Choropleth Map</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f7fa;
-      color: #333;
-      text-align: center;
-      padding-top: 20px;
-    }
-    h2 {
-      color: #4a90e2;
-      margin-bottom: 20px;
-    }
-    #mapChart {
-      width: 80%;
-      height: 500px;
-      margin: auto;
-      background-color: #e0e4eb;
-      border-radius: 8px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    }
-  </style>
 </head>
 <body>
   <h2>Choropleth Map: Gini Index by Country</h2>
-  <div id="mapChart"></div>
+  <div id="mapChart" class="chart"></div>
   <script src="script.js"></script>
   <script>createChoroplethMap();</script>
 </body>
