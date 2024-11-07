@@ -487,36 +487,28 @@ function createLineChart() {
          .attr("y", d => yLeft(d.Life_Expectancy))
          .attr("width", x.bandwidth())
          .attr("height", d => height - margin.bottom - yLeft(d.Life_Expectancy))
-         .attr("fill", "#4a90e2");
-  
-      // Line and points for Life Expectancy
-      const line = d3.line()
-                     .x(d => x(d.Country) + x.bandwidth() / 2)
-                     .y(d => yLeft(d.Life_Expectancy));
-  
-      svg.append("path")
-         .datum(globalData)
-         .attr("fill", "none")
-         .attr("stroke", "#333")
-         .attr("stroke-width", 2)
-         .attr("d", line);
-  
-      svg.selectAll(".circle-life")
-         .data(globalData)
-         .enter().append("circle")
-         .attr("cx", d => x(d.Country) + x.bandwidth() / 2)
-         .attr("cy", d => yLeft(d.Life_Expectancy))
-         .attr("r", 4)
-         .attr("fill", "black");
+         .attr("fill", "#4a90e2")
+         .on("mousemove", (event, d) => {
+           const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
+                                   <strong>Life Expectancy:</strong> ${d.Life_Expectancy}`;
+           showTooltip(tooltipContent, event);
+         })
+         .on("mouseout", hideTooltip);
   
       // Points for Infant Mortality
-      svg.selectAll(".circle-infant")
+      svg.selectAll(".circle")
          .data(globalData)
          .enter().append("circle")
          .attr("cx", d => x(d.Country) + x.bandwidth() / 2)
          .attr("cy", d => yRight(d.Infant_Mortality))
-         .attr("r", 4)
-         .attr("fill", "red");
+         .attr("r", 5)
+         .attr("fill", "red")
+         .on("mousemove", (event, d) => {
+           const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
+                                   <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
+           showTooltip(tooltipContent, event);
+         })
+         .on("mouseout", hideTooltip);
   
       // X-Axis
       svg.append("g")
@@ -552,25 +544,6 @@ function createLineChart() {
          .style("font-size", "12px")
          .text("Infant Mortality (per 1000 live births)");
   
-      // Dashed Red Lines on Left and Right Axes
-      svg.append("line")
-         .attr("x1", margin.left)
-         .attr("y1", margin.top)
-         .attr("x2", margin.left)
-         .attr("y2", height - margin.bottom)
-         .attr("stroke", "red")
-         .attr("stroke-width", 1)
-         .attr("stroke-dasharray", "4");
-  
-      svg.append("line")
-         .attr("x1", width - margin.right)
-         .attr("y1", margin.top)
-         .attr("x2", width - margin.right)
-         .attr("y2", height - margin.bottom)
-         .attr("stroke", "red")
-         .attr("stroke-width", 1)
-         .attr("stroke-dasharray", "4");
-  
       // Title and Subtitle
       svg.append("text")
          .attr("x", width / 2)
@@ -595,7 +568,6 @@ function createLineChart() {
          .call(d3.axisLeft(yLeft).ticks(5).tickSize(-width + margin.left + margin.right).tickFormat(""));
     });
   }
-  
   
   
   
