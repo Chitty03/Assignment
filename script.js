@@ -1,4 +1,3 @@
-// Global variable to store data
 let dataLoaded = false;
 let globalData = [];
 
@@ -7,12 +6,13 @@ function loadData(callback) {
   if (!dataLoaded) {
     d3.csv("Combined_Data.csv", d => ({
       Country: d.Country,
-      Gini_Index: +d.Gini_Index,               // Convert to number
-      Life_Expectancy: +d.Life_Expectancy,     // Convert to number
-      Infant_Mortality: +d.Infant_Mortality    // Convert to number
+      Gini_Index: +d.Gini_Index,
+      Life_Expectancy: +d.Life_Expectancy,
+      Infant_Mortality: +d.Infant_Mortality
     })).then(data => {
       globalData = data;
       dataLoaded = true;
+      console.log(globalData);  // Log to verify data loading
       callback();
     });
   } else {
@@ -24,15 +24,9 @@ function loadData(callback) {
 function createChoroplethMap() {
   loadData(() => {
     const width = 800, height = 500;
-
-    const svg = d3.select("#mapChart")
-                  .append("svg")
-                  .attr("width", width)
-                  .attr("height", height);
-
+    const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
     const projection = d3.geoMercator().scale(130).translate([width / 2, height / 1.5]);
     const path = d3.geoPath().projection(projection);
-
     const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.3, 0.5]);
 
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
@@ -55,13 +49,12 @@ function createChoroplethMap() {
   });
 }
 
-// Bar Chart showing Life Expectancy and color-coded by Gini Index
+// Bar Chart for Life Expectancy with Gini Index and Infant Mortality
 function createBarChart() {
   loadData(() => {
     const svg = d3.select("#barChart").append("svg").attr("width", 800).attr("height", 500);
-
     const x = d3.scaleBand().domain(globalData.map(d => d.Country)).range([0, 800]).padding(0.1);
-    const y = d3.scaleLinear().domain([0, d3.max(globalData, d => +d.Life_Expectancy)]).range([500, 0]);
+    const y = d3.scaleLinear().domain([0, d3.max(globalData, d => d.Life_Expectancy)]).range([500, 0]);
     const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.3, 0.5]);
 
     svg.selectAll("rect")
@@ -73,18 +66,17 @@ function createBarChart() {
        .attr("height", d => 500 - y(d.Life_Expectancy))
        .attr("fill", d => colorScale(d.Gini_Index))
        .append("title")
-       .text(d => `Country: ${d.Country}\nLife Expectancy: ${d.Life_Expectancy}\nGini Index: ${d.Gini_Index}\nInfant Mortality: ${d.Infant_Mortality}`);
+       .text(d => `Country: ${d.Country}\nGini Index: ${d.Gini_Index}\nLife Expectancy: ${d.Life_Expectancy}\nInfant Mortality: ${d.Infant_Mortality}`);
 
     svg.append("g").attr("transform", "translate(0,500)").call(d3.axisBottom(x)).selectAll("text").attr("transform", "rotate(-40)").style("text-anchor", "end");
     svg.append("g").call(d3.axisLeft(y));
   });
 }
 
-// Scatter Plot for Life Expectancy vs Gini Index, with bubble size for Infant Mortality
+// Scatter Plot for Gini Index vs Life Expectancy, with bubble size for Infant Mortality
 function createScatterPlot() {
   loadData(() => {
     const svg = d3.select("#scatterPlot").append("svg").attr("width", 800).attr("height", 500);
-
     const x = d3.scaleLinear().domain([0.3, 0.5]).range([0, 800]);
     const y = d3.scaleLinear().domain([70, 90]).range([500, 0]);
     const sizeScale = d3.scaleSqrt().domain([0, 15]).range([5, 20]);
@@ -108,7 +100,6 @@ function createScatterPlot() {
 function createLineChart() {
   loadData(() => {
     const svg = d3.select("#lineChart").append("svg").attr("width", 800).attr("height", 500);
-
     const x = d3.scalePoint().domain(globalData.map(d => d.Country)).range([0, 800]);
     const y = d3.scaleLinear().domain([0, 15]).range([500, 0]);
     const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([70, 90]);
@@ -118,7 +109,7 @@ function createLineChart() {
     svg.append("path")
        .datum(globalData)
        .attr("fill", "none")
-       .attr("stroke", d => colorScale(d.Life_Expectancy))
+       .attr("stroke", "blue")
        .attr("stroke-width", 2)
        .attr("d", line);
 
@@ -127,11 +118,10 @@ function createLineChart() {
   });
 }
 
-// Dual-Axis Chart for Life Expectancy and Infant Mortality, with color for Gini Index
+// Dual-Axis Chart with Life Expectancy and Infant Mortality, color for Gini Index
 function createDualAxisChart() {
   loadData(() => {
     const svg = d3.select("#dualAxisChart").append("svg").attr("width", 800).attr("height", 500);
-
     const x = d3.scaleBand().domain(globalData.map(d => d.Country)).range([0, 800]).padding(0.1);
     const yLeft = d3.scaleLinear().domain([70, 90]).range([500, 0]);
     const yRight = d3.scaleLinear().domain([0, 15]).range([500, 0]);
