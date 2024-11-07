@@ -265,8 +265,8 @@ function createScatterPlot() {
     const y = d3.scaleLinear().domain([70, 90]).range([height - margin.bottom, margin.top]);
     const sizeScale = d3.scaleSqrt().domain([0, 10]).range([3, 15]);
 
-    // New Color scale for Infant Mortality (using purple palette)
-    const colorScale = d3.scaleSequential(d3.interpolatePurples)
+    // Adjusted Color scale for Infant Mortality (starting with a darker shade)
+    const colorScale = d3.scaleSequential(d3.interpolatePlasma) // Plasma has good contrast in lighter colors
                          .domain(d3.extent(globalData, d => d.Infant_Mortality));
 
     // Title for the plot
@@ -279,7 +279,7 @@ function createScatterPlot() {
        .style("fill", "#663399")  // Dark purple for title
        .text("Impact of Income Inequality on Life Expectancy with Infant Mortality");
 
-    // Plotting circles with updated color scale
+    // Plotting circles with improved opacity
     svg.selectAll("circle")
        .data(globalData)
        .enter().append("circle")
@@ -287,7 +287,7 @@ function createScatterPlot() {
        .attr("cy", d => y(d.Life_Expectancy))
        .attr("r", d => sizeScale(d.Infant_Mortality))
        .attr("fill", d => colorScale(d.Infant_Mortality))
-       .attr("opacity", 0.8)
+       .attr("opacity", 0.85)  // Increased opacity for better visibility
        .on("mousemove", (event, d) => {
          const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
                                  <strong>Gini Index:</strong> ${d.Gini_Index}<br>
@@ -325,7 +325,7 @@ function createScatterPlot() {
        .style("font-size", "12px")
        .text("Life Expectancy");
 
-    // Legend for Infant Mortality with new color scheme
+    // Legend for Infant Mortality with adjusted colors
     const legend = svg.append("g")
                       .attr("transform", `translate(${width - margin.right - 30}, ${margin.top})`);
 
@@ -346,6 +346,7 @@ function createScatterPlot() {
           .style("font-size", "10px");
   });
 }
+
 
 
 
