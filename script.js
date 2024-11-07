@@ -37,14 +37,34 @@ function hideTooltip() {
 }
 
 // Choropleth Map
-function createChoroplethMap() {
+function createEnhancedChoroplethMap() {
   loadData(() => {
     const width = 800, height = 500;
     const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
     const projection = d3.geoMercator().scale(130).translate([width / 2, height / 1.5]);
     const path = d3.geoPath().projection(projection);
+
+    // Enhanced color scale for better differentiation
     const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
 
+    // Add a title and subtitle
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", 20)
+       .attr("text-anchor", "middle")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .text("Gini Index by Country");
+
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", 40)
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
+       .style("fill", "gray")
+       .text("A Choropleth Map showing income inequality (Gini Index) across countries");
+
+    // Draw the world map
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
       svg.selectAll("path")
          .data(world.features)
@@ -67,23 +87,37 @@ function createChoroplethMap() {
            }
          })
          .on("mouseout", hideTooltip);
-
-      // Add color legend
-      const legend = svg.append("g").attr("transform", `translate(${width - 150}, 20)`);
-      const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, 100]);
-      const legendAxis = d3.axisRight(legendScale).ticks(5);
-      legend.selectAll("rect")
-            .data(d3.range(0.2, 0.5, 0.1))
-            .enter().append("rect")
-            .attr("y", d => legendScale(d))
-            .attr("width", 10)
-            .attr("height", 20)
-            .attr("fill", d => colorScale(d));
-      legend.append("g").call(legendAxis);
-      legend.append("text").text("Gini Index").attr("x", -30).attr("y", -10).attr("text-anchor", "middle");
     });
+
+    // Enhanced color legend
+    const legend = svg.append("g").attr("transform", `translate(${width - 100}, 100)`);
+
+    // Draw the color legend rectangles
+    for (let i = 0; i <= 1; i += 0.1) {
+      legend.append("rect")
+            .attr("y", i * 100)
+            .attr("width", 15)
+            .attr("height", 10)
+            .attr("fill", colorScale(0.2 + i * 0.3));
+    }
+
+    // Legend axis
+    const legendScale = d3.scaleLinear()
+                          .domain([0.2, 0.5])
+                          .range([100, 0]);
+
+    const legendAxis = d3.axisRight(legendScale).ticks(5);
+    legend.append("g").attr("transform", "translate(15,0)").call(legendAxis);
+
+    legend.append("text")
+          .attr("x", -25)
+          .attr("y", -10)
+          .attr("text-anchor", "start")
+          .style("font-size", "12px")
+          .text("Gini Index");
   });
 }
+
 
 
 // Bar Chart
