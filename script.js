@@ -458,14 +458,28 @@ function createLineChart() {
   // Dual-Axis Chart for Life Expectancy and Infant Mortality
   function createDualAxisChart() {
     loadData(() => {
-      const width = 800, height = 500, margin = { top: 20, right: 60, bottom: 80, left: 60 };
-      const svg = d3.select("#dualAxisChart").append("svg").attr("width", width).attr("height", height);
+      const width = 900, height = 500, margin = { top: 50, right: 60, bottom: 100, left: 60 };
+      const svg = d3.select("#dualAxisChart").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
   
-      const x = d3.scaleBand().domain(globalData.map(d => d.Country)).range([margin.left, width - margin.right]).padding(0.1);
-      const yLeft = d3.scaleLinear().domain([70, d3.max(globalData, d => d.Life_Expectancy) + 5]).nice().range([height - margin.bottom, margin.top]);
-      const yRight = d3.scaleLinear().domain([0, d3.max(globalData, d => d.Infant_Mortality) + 1]).nice().range([height - margin.bottom, margin.top]);
+      // Scales
+      const x = d3.scaleBand()
+                  .domain(globalData.map(d => d.Country))
+                  .range([margin.left, width - margin.right])
+                  .padding(0.1);
   
-      // Bars for Life Expectancy, color-coded by Gini Index
+      const yLeft = d3.scaleLinear()
+                      .domain([70, d3.max(globalData, d => d.Life_Expectancy) + 5])
+                      .nice()
+                      .range([height - margin.bottom, margin.top]);
+  
+      const yRight = d3.scaleLinear()
+                       .domain([0, d3.max(globalData, d => d.Infant_Mortality) + 1])
+                       .nice()
+                       .range([height - margin.bottom, margin.top]);
+  
+      // Bars for Life Expectancy
       svg.selectAll(".bar")
          .data(globalData)
          .enter().append("rect")
@@ -476,14 +490,12 @@ function createLineChart() {
          .attr("fill", "#4a90e2")
          .on("mousemove", (event, d) => {
            const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
-                                   <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
-                                   <strong>Gini Index:</strong> ${d.Gini_Index}<br>
-                                   <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
+                                   <strong>Life Expectancy:</strong> ${d.Life_Expectancy}`;
            showTooltip(tooltipContent, event);
          })
          .on("mouseout", hideTooltip);
   
-      // Circles for Infant Mortality on the right y-axis
+      // Points for Infant Mortality
       svg.selectAll(".circle")
          .data(globalData)
          .enter().append("circle")
@@ -493,9 +505,7 @@ function createLineChart() {
          .attr("fill", "red")
          .on("mousemove", (event, d) => {
            const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
-                                   <strong>Infant Mortality:</strong> ${d.Infant_Mortality}<br>
-                                   <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
-                                   <strong>Gini Index:</strong> ${d.Gini_Index}`;
+                                   <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
            showTooltip(tooltipContent, event);
          })
          .on("mouseout", hideTooltip);
@@ -503,7 +513,7 @@ function createLineChart() {
       // X-Axis
       svg.append("g")
          .attr("transform", `translate(0,${height - margin.bottom})`)
-         .call(d3.axisBottom(x).tickSizeOuter(0))
+         .call(d3.axisBottom(x))
          .selectAll("text")
          .attr("transform", "rotate(-45)")
          .style("text-anchor", "end");
@@ -518,6 +528,7 @@ function createLineChart() {
          .attr("dy", "-2.5em")
          .attr("text-anchor", "middle")
          .attr("transform", "rotate(-90)")
+         .style("font-size", "12px")
          .text("Life Expectancy (Years)");
   
       // Right Y-Axis for Infant Mortality
@@ -530,8 +541,33 @@ function createLineChart() {
          .attr("dy", "2.5em")
          .attr("text-anchor", "middle")
          .attr("transform", "rotate(-90)")
+         .style("font-size", "12px")
          .text("Infant Mortality (per 1000 live births)");
+  
+      // Title and Subtitle
+      svg.append("text")
+         .attr("x", width / 2)
+         .attr("y", margin.top / 2)
+         .attr("text-anchor", "middle")
+         .style("font-size", "18px")
+         .style("font-weight", "bold")
+         .text("Dual-Axis Chart: Life Expectancy & Infant Mortality by Country");
+  
+      svg.append("text")
+         .attr("x", width / 2)
+         .attr("y", margin.top)
+         .attr("text-anchor", "middle")
+         .style("font-size", "12px")
+         .style("fill", "gray")
+         .text("Comparing Life Expectancy and Infant Mortality across countries");
+  
+      // Adding gridlines
+      svg.append("g")
+         .attr("class", "grid")
+         .attr("transform", `translate(${margin.left},0)`)
+         .call(d3.axisLeft(yLeft).ticks(5).tickSize(-width + margin.left + margin.right).tickFormat(""));
     });
   }
+  
   
   
