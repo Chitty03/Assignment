@@ -255,31 +255,50 @@ function createBarChart() {
 
 function createScatterPlot() {
   loadData(() => {
-    const width = 800, height = 500, margin = { top: 50, right: 20, bottom: 70, left: 70 };
-
+    const width = 900, height = 500, margin = { top: 70, right: 80, bottom: 60, left: 80 };
     const svg = d3.select("#scatterPlot").append("svg")
                   .attr("width", width)
                   .attr("height", height);
 
-    const x = d3.scaleLinear().domain([0.2, 0.5]).range([margin.left, width - margin.right]);
-    const y = d3.scaleLinear().domain([70, 90]).range([height - margin.bottom, margin.top]);
-    const sizeScale = d3.scaleSqrt().domain([0, 10]).range([3, 15]);
+    // Scales
+    const x = d3.scaleLinear()
+                .domain([0.2, 0.5])
+                .range([margin.left, width - margin.right]);
 
-    // Color scale for Infant Mortality
+    const y = d3.scaleLinear()
+                .domain([70, 90])
+                .range([height - margin.bottom, margin.top]);
+
+    const sizeScale = d3.scaleSqrt()
+                        .domain([0, d3.max(globalData, d => d.Infant_Mortality)])
+                        .range([4, 20]);
+
     const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                         .domain(d3.extent(globalData, d => d.Infant_Mortality));
+                         .domain([2, d3.max(globalData, d => d.Infant_Mortality)]);
 
-    // Title for the plot
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", margin.top / 2)
-       .attr("text-anchor", "middle")
-       .attr("class", "title")
-       .style("font-size", "16px")
-       .style("fill", "#336699")
-       .text("Impact of Income Inequality on Life Expectancy with Infant Mortality");
+    // Axes
+    svg.append("g")
+       .attr("transform", `translate(0,${height - margin.bottom})`)
+       .call(d3.axisBottom(x).ticks(8).tickFormat(d3.format(".2f")))
+       .attr("class", "axis");
 
-    // Plotting circles
+    svg.append("g")
+       .attr("transform", `translate(${margin.left},0)`)
+       .call(d3.axisLeft(y))
+       .attr("class", "axis");
+
+    // Gridlines
+    svg.append("g")
+       .attr("class", "grid")
+       .attr("transform", `translate(0,${height - margin.bottom})`)
+       .call(d3.axisBottom(x).ticks(8).tickSize(-height + margin.top + margin.bottom).tickFormat(""));
+
+    svg.append("g")
+       .attr("class", "grid")
+       .attr("transform", `translate(${margin.left},0)`)
+       .call(d3.axisLeft(y).ticks(5).tickSize(-width + margin.left + margin.right).tickFormat(""));
+
+    // Data Points
     svg.selectAll("circle")
        .data(globalData)
        .enter().append("circle")
@@ -290,60 +309,80 @@ function createScatterPlot() {
        .attr("opacity", 0.8)
        .on("mousemove", (event, d) => {
          const tooltipContent = `<strong>Country:</strong> ${d.Country}<br>
-                                 <strong>Gini Index:</strong> ${d.Gini_Index}<br>
+                                 <strong>Gini Index:</strong> ${d.Gini_Index.toFixed(2)}<br>
                                  <strong>Life Expectancy:</strong> ${d.Life_Expectancy}<br>
                                  <strong>Infant Mortality:</strong> ${d.Infant_Mortality}`;
          showTooltip(tooltipContent, event);
        })
        .on("mouseout", hideTooltip);
 
-    // X-axis
-    svg.append("g")
-       .attr("transform", `translate(0,${height - margin.bottom})`)
-       .call(d3.axisBottom(x).tickFormat(d3.format(".2f")));
-
-    // X-axis label
+    // Title and Subtitle
     svg.append("text")
        .attr("x", width / 2)
-       .attr("y", height - margin.bottom / 3)
+       .attr("y", margin.top / 2)
+       .attr("text-anchor", "middle")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .text("Scatter Plot: Life Expectancy vs Gini Index with Infant Mortality");
+
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", margin.top)
+       .attr("text-anchor", "middle")
+       .style("font-size", "12px")
+       .style("fill", "gray")
+       .text("Each circle's size represents Infant Mortality Rate per country");
+
+    // Axis Labels
+    svg.append("text")
+       .attr("x", width / 2)
+       .attr("y", height - 20)
        .attr("text-anchor", "middle")
        .style("font-size", "12px")
        .text("Gini Index");
 
-    // Y-axis
-    svg.append("g")
-       .attr("transform", `translate(${margin.left},0)`)
-       .call(d3.axisLeft(y));
-
-    // Y-axis label
     svg.append("text")
-       .attr("transform", "rotate(-90)")
-       .attr("y", margin.left / 3)
        .attr("x", -height / 2)
-       .attr("dy", "-1.5em")
+       .attr("y", 20)
        .attr("text-anchor", "middle")
+       .attr("transform", "rotate(-90)")
        .style("font-size", "12px")
-       .text("Life Expectancy");
+       .text("Life Expectancy (Years)");
 
-    // Legend for Infant Mortality
-    const legend = svg.append("g")
-                      .attr("transform", `translate(${width - margin.right - 30}, ${margin.top})`);
+    // Legend for Circle Size
+    const legendSize = svg.append("g")
+                          .attr("class", "legendSize")
+                          .attr("transform", `translate(${width - 60}, ${margin.top})`);
 
-    legend.selectAll("rect")
-          .data(colorScale.ticks(5).slice(1))
-          .enter().append("rect")
-          .attr("y", (d, i) => i * 20)
-          .attr("width", 15)
-          .attr("height", 15)
-          .style("fill", colorScale);
+    const legendSizeScale = d3.scaleSqrt()
+                              .domain([2, 8])
+                              .range([4, 20]);
 
-    legend.selectAll("text")
-          .data(colorScale.ticks(5).slice(1))
-          .enter().append("text")
-          .attr("x", 20)
-          .attr("y", (d, i) => i * 20 + 12)
-          .text(d => d.toFixed(1))
-          .style("font-size", "10px");
+    const legendSizeData = [2, 4, 6, 8];
+
+    legendSize.selectAll("circle")
+              .data(legendSizeData)
+              .enter().append("circle")
+              .attr("cy", d => -legendSizeScale(d))
+              .attr("r", d => legendSizeScale(d))
+              .attr("fill", colorScale(d3.max(globalData, d => d.Infant_Mortality)))
+              .attr("opacity", 0.8);
+
+    legendSize.selectAll("text")
+              .data(legendSizeData)
+              .enter().append("text")
+              .attr("y", d => -2 * legendSizeScale(d))
+              .attr("x", 10)
+              .attr("dy", "0.35em")
+              .style("font-size", "10px")
+              .text(d => d);
+
+    legendSize.append("text")
+              .attr("x", 0)
+              .attr("y", -40)
+              .attr("text-anchor", "middle")
+              .style("font-size", "10px")
+              .text("Infant Mortality Rate");
   });
 }
 
