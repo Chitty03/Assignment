@@ -39,30 +39,33 @@ function hideTooltip() {
 // Choropleth Map
 function createChoroplethMap() {
   loadData(() => {
-    const width = 900, height = 500;
-    const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
+    const width = 1000, height = 500;
+    const svg = d3.select("#mapChart").append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+                  
     const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
     const path = d3.geoPath().projection(projection);
 
-    // Updated color scale for better color contrast
-    const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
+    // Improved color scale for better contrast
+    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
 
-    // Title and Subtitle
+    // Title
     svg.append("text")
        .attr("x", width / 2)
-       .attr("y", 20)
+       .attr("y", 30)
        .attr("text-anchor", "middle")
-       .style("font-size", "18px")
+       .style("font-size", "20px")
        .style("font-weight", "bold")
-       .text("Gini Index by Country (Income Inequality)");
+       .text("Choropleth Map: Gini Index by Country");
 
     svg.append("text")
        .attr("x", width / 2)
-       .attr("y", 40)
+       .attr("y", 50)
        .attr("text-anchor", "middle")
        .style("font-size", "12px")
        .style("fill", "gray")
-       .text("Choropleth map showing income inequality across different countries");
+       .text("Income inequality represented by the Gini Index across different countries");
 
     // World map data
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
@@ -95,9 +98,9 @@ function createChoroplethMap() {
          });
     });
 
-    // Improved Legend
+    // Enhanced Legend Placement
     const legendWidth = 200, legendHeight = 10;
-    const legend = svg.append("g").attr("transform", `translate(${width - 220}, 60)`);
+    const legend = svg.append("g").attr("transform", `translate(${width - 250}, 100)`);
 
     // Gradient for legend
     const defs = svg.append("defs");
@@ -132,6 +135,7 @@ function createChoroplethMap() {
 
   });
 }
+
 
 
 
