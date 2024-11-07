@@ -37,34 +37,34 @@ function hideTooltip() {
 }
 
 // Choropleth Map
-function createChoroplethMap() {
+function createEnhancedChoroplethMap() {
   loadData(() => {
-    const width = 800, height = 500;
+    const width = 900, height = 500;
     const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
-    const projection = d3.geoMercator().scale(130).translate([width / 2, height / 1.5]);
+    const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
     const path = d3.geoPath().projection(projection);
 
-    // Enhanced color scale for better differentiation
-    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 0.5]);
+    // Custom color scale for Gini Index with distinct colors
+    const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
 
-    // Add a title and subtitle
+    // Title and Subtitle
     svg.append("text")
        .attr("x", width / 2)
-       .attr("y", 20)
+       .attr("y", 30)
        .attr("text-anchor", "middle")
-       .style("font-size", "18px")
+       .style("font-size", "20px")
        .style("font-weight", "bold")
-       .text("Gini Index by Country");
+       .text("Gini Index by Country (Income Inequality)");
 
     svg.append("text")
        .attr("x", width / 2)
-       .attr("y", 40)
+       .attr("y", 50)
        .attr("text-anchor", "middle")
        .style("font-size", "12px")
        .style("fill", "gray")
-       .text("A Choropleth Map showing income inequality (Gini Index) across countries");
+       .text("Choropleth map showing income inequality across different countries");
 
-    // Draw the world map
+    // World map data
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
       svg.selectAll("path")
          .data(world.features)
@@ -72,51 +72,67 @@ function createChoroplethMap() {
          .attr("d", path)
          .attr("fill", d => {
            const countryData = globalData.find(c => c.Country === d.properties.name);
-           return countryData ? colorScale(countryData.Gini_Index) : "#ccc";
+           return countryData ? colorScale(countryData.Gini_Index) : "#e0e0e0";
          })
-         .attr("stroke", "black")
+         .attr("stroke", "#555")
          .attr("stroke-width", 0.5)
+         .on("mouseover", function() {
+           d3.select(this).attr("stroke-width", 1.5).attr("stroke", "#333");
+         })
+         .on("mouseout", function() {
+           d3.select(this).attr("stroke-width", 0.5).attr("stroke", "#555");
+           hideTooltip();
+         })
          .on("mousemove", function(event, d) {
            const countryData = globalData.find(c => c.Country === d.properties.name);
            if (countryData) {
              const tooltipContent = `<strong>Country:</strong> ${countryData.Country}<br>
-                                     <strong>Gini Index:</strong> ${countryData.Gini_Index}<br>
+                                     <strong>Gini Index:</strong> ${countryData.Gini_Index.toFixed(2)}<br>
                                      <strong>Life Expectancy:</strong> ${countryData.Life_Expectancy}<br>
                                      <strong>Infant Mortality:</strong> ${countryData.Infant_Mortality}`;
              showTooltip(tooltipContent, event);
            }
-         })
-         .on("mouseout", hideTooltip);
+         });
     });
 
-    // Enhanced color legend
-    const legend = svg.append("g").attr("transform", `translate(${width - 100}, 100)`);
+    // Improved Legend
+    const legendWidth = 200, legendHeight = 10;
+    const legend = svg.append("g").attr("transform", `translate(${width - 250}, 60)`);
 
-    // Draw the color legend rectangles
-    for (let i = 0; i <= 1; i += 0.1) {
-      legend.append("rect")
-            .attr("y", i * 100)
-            .attr("width", 15)
-            .attr("height", 10)
-            .attr("fill", colorScale(0.2 + i * 0.3));
-    }
+    // Gradient for legend
+    const defs = svg.append("defs");
+    const linearGradient = defs.append("linearGradient")
+                               .attr("id", "legendGradient");
 
-    // Legend axis
-    const legendScale = d3.scaleLinear()
-                          .domain([0.2, 0.5])
-                          .range([100, 0]);
+    linearGradient.selectAll("stop")
+                  .data(colorScale.ticks(10).map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: colorScale(t) })))
+                  .enter().append("stop")
+                  .attr("offset", d => d.offset)
+                  .attr("stop-color", d => d.color);
 
-    const legendAxis = d3.axisRight(legendScale).ticks(5);
-    legend.append("g").attr("transform", "translate(15,0)").call(legendAxis);
+    legend.append("rect")
+          .attr("width", legendWidth)
+          .attr("height", legendHeight)
+          .style("fill", "url(#legendGradient)")
+          .style("stroke", "#ccc")
+          .style("stroke-width", 0.5);
+
+    // Legend Scale
+    const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, legendWidth]);
+    const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(".2f"));
+    legend.append("g").attr("transform", `translate(0,${legendHeight})`).call(legendAxis);
 
     legend.append("text")
-          .attr("x", -25)
+          .attr("x", legendWidth / 2)
           .attr("y", -10)
-          .attr("text-anchor", "start")
+          .attr("text-anchor", "middle")
           .style("font-size", "12px")
+          .style("fill", "#333")
           .text("Gini Index");
+
   });
 }
+
 
 
 
