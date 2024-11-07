@@ -456,7 +456,7 @@ function createLineChart() {
 
   
   // Dual-Axis Chart for Life Expectancy and Infant Mortality
-  function createEnhancedDualAxisChart() {
+  function createDualAxisChart() {
     loadData(() => {
       const width = 900, height = 500, margin = { top: 50, right: 60, bottom: 100, left: 60 };
       const svg = d3.select("#dualAxisChart").append("svg")
