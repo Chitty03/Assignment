@@ -50,14 +50,16 @@ function createChoroplethMap() {
        .attr("x", width / 2)
        .attr("y", 20)
        .attr("text-anchor", "middle")
-       .style("font-size", "18px")
+       .style("font-size", "24px")
        .style("font-weight", "bold")
+       .style("fill", "#333")
        .text("Gini Index by Country (Income Inequality)");
+
     svg.append("text")
        .attr("x", width / 2)
-       .attr("y", 40)
+       .attr("y", 45)
        .attr("text-anchor", "middle")
-       .style("font-size", "12px")
+       .style("font-size", "14px")
        .style("fill", "gray")
        .text("Choropleth map showing income inequality across different countries");
     // World map data
@@ -92,7 +94,7 @@ function createChoroplethMap() {
     });
     // Improved Legend
     const legendWidth = 200, legendHeight = 10;
-    const legend = svg.append("g").attr("transform", `translate(${width - 220}, 60)`);
+    const legend = svg.append("g").attr("transform", `translate(${width - legendwidth - 50}, 70)`);
     // Gradient for legend
     const defs = svg.append("defs");
     const linearGradient = defs.append("linearGradient")
