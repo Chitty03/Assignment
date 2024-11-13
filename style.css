@@ -37,3 +37,59 @@ h1, h2 {
   pointer-events: none;
   z-index: 10;  /* Ensure tooltip appears above all elements */
 }
+
+/* Styles specific to the index page */
+.index-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url('path_to_your_background_image.jpg'); /* Replace with your image path */
+  background-size: cover;
+  background-position: center;
+}
+
+.content-box {
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  width: 300px;
+  color: white;
+}
+
+.content-box h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.content-box p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.content-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.content-box ul li {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.content-box ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.content-box ul li a:hover {
+  text-decoration: underline;
+}
+
+.footer-text {
+  font-size: 12px;
+  margin-top: 20px;
+  font-weight: bold;
+}
