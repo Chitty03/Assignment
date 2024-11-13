@@ -1,7 +1,8 @@
 /* General Styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f7fa;
+   background: url('BG.jpg') no-repeat center center fixed; /* Add background image */
+  background-size: cover; 
   color: #333;
   margin: 0;
   padding: 0;                /* Remove padding */
