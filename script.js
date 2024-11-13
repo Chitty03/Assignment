@@ -38,16 +38,31 @@ function hideTooltip() {
 
 // Choropleth Map
 
+
+
 function createChoroplethMap() {
    loadData(() => {
      const width = 900, height = 500;
      const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
      const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
      const path = d3.geoPath().projection(projection);
- 
      // Updated color scale for better color contrast
      const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
- 
+     // Title and Subtitle
+     svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", 20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("font-weight", "bold")
+        .text("Gini Index by Country (Income Inequality)");
+     svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", 40)
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("fill", "gray")
+        .text("Choropleth map showing income inequality across different countries");
      // World map data
      d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
        svg.selectAll("path")
@@ -78,34 +93,28 @@ function createChoroplethMap() {
             }
           });
      });
- 
-     // Improved Legend with adjusted position
+     // Improved Legend
      const legendWidth = 200, legendHeight = 10;
-     const legend = svg.append("g").attr("transform", `translate(${width - 220}, 20)`); // Adjusted position for legend
- 
+     const legend = svg.append("g").attr("transform", `translate(${width - 220}, 60)`);
      // Gradient for legend
      const defs = svg.append("defs");
      const linearGradient = defs.append("linearGradient")
                                 .attr("id", "legendGradient");
- 
      linearGradient.selectAll("stop")
                    .data(colorScale.ticks(10).map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: colorScale(t) })))
                    .enter().append("stop")
                    .attr("offset", d => d.offset)
                    .attr("stop-color", d => d.color);
- 
      legend.append("rect")
            .attr("width", legendWidth)
            .attr("height", legendHeight)
            .style("fill", "url(#legendGradient)")
            .style("stroke", "#ccc")
            .style("stroke-width", 0.5);
- 
      // Legend Scale
      const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, legendWidth]);
      const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(".2f"));
      legend.append("g").attr("transform", `translate(0,${legendHeight})`).call(legendAxis);
- 
      legend.append("text")
            .attr("x", legendWidth / 2)
            .attr("y", -10)
@@ -117,7 +126,6 @@ function createChoroplethMap() {
  }
  
  
-
 // Bar Chart
 function createBarChart() {
   loadData(() => {
