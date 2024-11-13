@@ -1,46 +1,13 @@
-/* Existing body styling for other pages */
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f7fa;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-}
-
-h1, h2 {
-    text-align: center;
-    color: #4a90e2;
-}
-
-.chart {
-    width: auto;
-    height: 700px;
-    background-color: #e0e4eb;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding-top: 60px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.axis-label {
-    font-size: 14px;
-    fill: #555;
-}
-
-.tooltip {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 12px;
-    pointer-events: none;
-    z-index: 10;
-}
-
-/* New styling for the specific content container */
-.content-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,6 +17,7 @@ h1, h2 {
     background-position: center;
 }
 
+/* Container for the content */
 .content {
     background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
     color: white;
@@ -59,17 +27,20 @@ h1, h2 {
     text-align: center;
 }
 
+/* Title styling */
 .content h1 {
     font-size: 24px;
     margin-bottom: 10px;
 }
 
+/* Subtitle styling */
 .content p {
     font-size: 14px;
     margin-bottom: 20px;
 }
 
-.button-link {
+/* Navigation links styling */
+.content a {
     display: block;
     font-size: 16px;
     color: white;
@@ -81,11 +52,12 @@ h1, h2 {
     transition: background-color 0.3s ease;
 }
 
-/* Hover effect for buttons */
-.button-link:hover {
+/* Hover effect for links */
+.content a:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+/* Footer text styling */
 .footer-text {
     font-size: 12px;
     color: lightgray;
