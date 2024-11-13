@@ -33,52 +33,41 @@ h1, h2 {
   margin: 0 auto;
 }
 
-/* Title and Subtitle */
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
+/* Enhanced Tooltip Styling */
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  font-weight: bold;
-}
-
-p {
-  font-size: 14px;
-  margin-bottom: 20px;
-  color: white;
-}
-
-/* Link Container and Links */
-.link-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.link-container a {
-  display: block;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  text-decoration: none;
   padding: 10px;
-  margin: 5px 0;
-  border-radius: 5px;
-  font-weight: bold;
-  width: 100%;
-  text-align: center;
-  transition: background 0.3s ease;
+  border-radius: 8px;
+  font-size: 13px;
+  pointer-events: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
 }
 
-.link-container a:hover {
-  background: rgba(255, 255, 255, 0.2);
+/* Sidebar for Detailed Information */
+.sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: #f4f7fa;
+  box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  overflow-y: auto;
 }
 
-/* Footer Text */
-.footer {
-  margin-top: 20px;
-  font-size: 12px;
-  color: lightgray;
+.sidebar h3 {
+  color: #4a90e2;
   font-weight: bold;
-  text-align: center;
+  margin-top: 0;
+}
+
+.sidebar p {
+  font-size: 14px;
+  color: #333;
 }
 
 /* Chart Container */
@@ -92,22 +81,4 @@ p {
   padding-left: 20px;
   padding-right: 20px;
   margin: auto;
-}
-
-/* Axis Label for Chart */
-.axis-label {
-  font-size: 14px;
-  fill: #555;
-}
-
-/* Tooltip for Chart */
-.tooltip {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 10;
 }
