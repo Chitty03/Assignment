@@ -47,7 +47,7 @@ function createChoroplethMap() {
      // Title and Subtitle
      svg.append("text")
         .attr("x", width / 2)
-        .attr("y", 15)
+        .attr("y", 5)
         .attr("text-anchor", "middle")
         .style("font-size", "18px")
         .style("font-weight", "bold")
