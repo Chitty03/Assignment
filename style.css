@@ -7,28 +7,46 @@ body {
 }
 
 .title-container {
+  position: relative; /* Ensure title container stays relative to map */
   text-align: center;
-  margin-bottom: 10px; /* Add spacing between the title and the map */
+  margin-bottom: 10px;
+  z-index: 10; /* Position in front of the map */
 }
 
 h2 {
   color: #4a90e2;
   font-size: 18px;
   font-weight: bold;
+  position: relative;
+  z-index: 10;
 }
 
 .subtitle {
   font-size: 12px;
   color: gray;
   margin-top: -5px;
+  position: relative;
+  z-index: 10;
 }
 
 .chart {
+  position: relative;
   width: 80%;
   height: 500px;
   background-color: #e0e4eb;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin-top: 20px; /* Extra margin to ensure map does not overlap */
+  margin-top: 20px;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 20; /* Ensure tooltips stay above all elements */
 }
