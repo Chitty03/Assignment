@@ -55,12 +55,11 @@ p {
   font-weight: bold;
   width: 100%;
   text-align: center;
-  transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for gradient and color */
+  transition: background 0.3s ease;
 }
 
 .link-container a:hover {
-  background: linear-gradient(black,white,blue); /* Gradient colors on hover */
-  color: #ffffff; /* Text color */
+  background: rgba(255, 255, 255, 0.2); /* Darker hover effect */
 }
 
 /* Footer Text */
