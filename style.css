@@ -12,7 +12,7 @@ h1, h2 {
 }
 
 .chart {
-  width: 80%;
+  width: auto;
   height: 700px;
   background-color: #e0e4eb;
   border-radius: 8px;
