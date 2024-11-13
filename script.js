@@ -44,22 +44,7 @@ function createChoroplethMap() {
      const path = d3.geoPath().projection(projection);
      // Updated color scale for better color contrast
      const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
-     // Title and Subtitle
-     svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", 20)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("font-weight", "bold")
-        .text("Gini Index by Country (Income Inequality)");
-     svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", 40)
-        .attr("text-anchor", "middle")
-        .style("font-size", "12px")
-        .style("fill", "gray")
-        .text("Choropleth map showing income inequality across different countries");
-     // World map data
+    
      d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
        svg.selectAll("path")
           .data(world.features)
