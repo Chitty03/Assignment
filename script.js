@@ -38,7 +38,7 @@ function hideTooltip() {
 // Choropleth Map
 function createChoroplethMap() {
    loadData(() => {
-     const width = 900, height = 600;
+     const width = 900, height = 900;
      const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
      const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
      const path = d3.geoPath().projection(projection);
