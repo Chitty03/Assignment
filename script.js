@@ -96,13 +96,6 @@ function createChoroplethMap() {
      const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, legendWidth]);
      const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(".2f"));
      legend.append("g").attr("transform", `translate(0,${legendHeight})`).call(legendAxis);
-     legend.append("text")
-           .attr("x", legendWidth / 2)
-           .attr("y", -10)
-           .attr("text-anchor", "middle")
-           .style("font-size", "12px")
-           .style("fill", "#333")
-           .text("Gini Index");
    });
  }
 
