@@ -38,7 +38,7 @@ function hideTooltip() {
 // Choropleth Map
 function createChoroplethMap() {
    loadData(() => {
-     const width = 900, height = 900;
+     const width = 900, height = 700;
      const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
      const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
      const path = d3.geoPath().projection(projection);
@@ -47,14 +47,14 @@ function createChoroplethMap() {
      // Title and Subtitle
      svg.append("text")
         .attr("x", width / 2)
-        .attr("y", 10)
+        .attr("y", 25)
         .attr("text-anchor", "middle")
         .style("font-size", "18px")
         .style("font-weight", "bold")
         .text("Gini Index by Country (Income Inequality)");
      svg.append("text")
         .attr("x", width / 2)
-        .attr("y", 40)
+        .attr("y", 25)
         .attr("text-anchor", "middle")
         .style("font-size", "12px")
         .style("fill", "gray")
