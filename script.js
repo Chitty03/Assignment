@@ -334,11 +334,6 @@ function createScatterPlot() {
 }
 
 
-
-
-
-
-
 // Line Chart
 function createLineChart() {
   loadData(() => {

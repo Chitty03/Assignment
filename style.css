@@ -11,6 +11,22 @@ h1, h2 {
   color: #4a90e2;
 }
 
+.title-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.title-container h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.title-container p {
+  font-size: 12px;
+  color: gray;
+  margin: 0;
+}
+
 .chart-container {
   display: flex;
   flex-direction: column;
@@ -24,9 +40,7 @@ h1, h2 {
   background-color: #e0e4eb;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding-top: 60px; /* Add padding to push map content down */
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 40px 20px 20px;
 }
 
 .axis-label {
@@ -42,10 +56,5 @@ h1, h2 {
   border-radius: 5px;
   font-size: 12px;
   pointer-events: none;
-  z-index: 10;  /* Ensure tooltip appears above all elements */
-}
-
-.title-container, .legend {
-  z-index: 1; /* Make sure it sits above the map paths */
-  position: relative;
+  z-index: 10;
 }
