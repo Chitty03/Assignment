@@ -11,13 +11,6 @@ h1, h2 {
   color: #4a90e2;
 }
 
-.chart-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
-}
-
 .chart {
   width: 80%;
   height: 500px;
