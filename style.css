@@ -4,7 +4,11 @@ body {
   background-color: #f4f7fa;
   color: #333;
   margin: 0;
-  padding: 20px;
+  padding: 0;                /* Remove padding */
+  display: flex;             /* Add flex display */
+  justify-content: center;   /* Center horizontally */
+  align-items: center;       /* Center vertically */
+  height: 100vh;             /* Full viewport height */
 }
 
 h1, h2 {
