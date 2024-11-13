@@ -59,7 +59,7 @@ p {
 }
 
 .link-container a:hover {
-  background: linear-gradient(45deg, #4a90e2, #50c878); /* Gradient colors on hover */
+  background: linear-gradient(black,white,blue); /* Gradient colors on hover */
   color: #ffffff; /* Text color */
 }
 
