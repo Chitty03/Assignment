@@ -1,90 +1,93 @@
+/* Existing body styling for other pages */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f7fa;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+    padding: 20px;
 }
 
 h1, h2 {
-  text-align: center;
-  color: #4a90e2;
+    text-align: center;
+    color: #4a90e2;
 }
 
 .chart {
-  width: auto;
-  height: 700px;
-  background-color: #e0e4eb;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding-top: 60px; /* Add padding to push map content down */
-  padding-left: 20px;
-  padding-right: 20px;
+    width: auto;
+    height: 700px;
+    background-color: #e0e4eb;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding-top: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .axis-label {
-  font-size: 14px;
-  fill: #555;
+    font-size: 14px;
+    fill: #555;
 }
 
 .tooltip {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 10;  /* Ensure tooltip appears above all elements */
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10;
 }
 
-/* Parallax Background */
-.parallax-background {
-  background-image: url('3D Animated Bars.jpeg'); /* Replace with actual path to your 3D JPEG file */
-  background-attachment: fixed; /* Enables parallax effect */
-  background-size: cover;
-  background-position: center;
-  height: 100vh; /* Full viewport height */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+/* New styling for the specific content container */
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('background.jpg'); /* Replace with your background image */
+    background-size: cover;
+    background-position: center;
 }
 
-/* Content Styling for Parallax Page */
 .content {
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 20px 40px;
-  border-radius: 10px;
-  text-align: center;
-  color: white;
-  max-width: 300px;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
 }
 
 .content h1 {
-  font-size: 24px;
-  margin: 0;
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .content p {
-  font-size: 14px;
-  margin-top: 10px;
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
-.link-container a {
-  display: block;
-  font-size: 16px;
-  color: white;
-  text-decoration: none;
-  margin: 10px 0;
+.button-link {
+    display: block;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    margin: 8px 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-.link-container a:hover {
-  text-decoration: underline;
+/* Hover effect for buttons */
+.button-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .footer-text {
-  font-size: 12px;
-  margin-top: 20px;
-  color: #a8a8a8;
+    font-size: 12px;
+    color: lightgray;
+    margin-top: 20px;
 }
