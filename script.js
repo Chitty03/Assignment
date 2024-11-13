@@ -74,24 +74,7 @@ function createChoroplethMap() {
             }
           });
      });
-     // Improved Legend
-     const legendWidth = 200, legendHeight = 10;
-     const legend = svg.append("g").attr("transform", `translate(${width - 220}, 60)`);
-     // Gradient for legend
-     const defs = svg.append("defs");
-     const linearGradient = defs.append("linearGradient")
-                                .attr("id", "legendGradient");
-     linearGradient.selectAll("stop")
-                   .data(colorScale.ticks(10).map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: colorScale(t) })))
-                   .enter().append("stop")
-                   .attr("offset", d => d.offset)
-                   .attr("stop-color", d => d.color);
-     legend.append("rect")
-           .attr("width", legendWidth)
-           .attr("height", legendHeight)
-           .style("fill", "url(#legendGradient)")
-           .style("stroke", "#ccc")
-           .style("stroke-width", 0.5);
+
    });
  }
 
