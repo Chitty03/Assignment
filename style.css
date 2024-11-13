@@ -1,44 +1,16 @@
+/* General styling */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f7fa;
-  color: #333;
   margin: 0;
-  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #2e2e2e;
 }
 
-h1, h2 {
-  text-align: center;
-  color: #4a90e2;
-}
-
-.chart {
-  width: auto;
-  height: 700px;
-  background-color: #e0e4eb;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding-top: 60px; /* Add padding to push map content down */
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.axis-label {
-  font-size: 14px;
-  fill: #555;
-}
-
-.tooltip {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 10;  /* Ensure tooltip appears above all elements */
-}
-
-/* Styles specific to the index page */
+/* Background and container setup */
 .index-container {
   position: relative;
   display: flex;
@@ -63,6 +35,7 @@ h1, h2 {
   z-index: 1;
 }
 
+/* Content box */
 .content-box {
   position: relative;
   z-index: 2;
