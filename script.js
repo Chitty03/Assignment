@@ -39,35 +39,30 @@ function hideTooltip() {
 function createChoroplethMap() {
    loadData(() => {
      const width = 900, height = 500;
-     const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
+     const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height + 50); // Increase height to add space for title
  
-     // Title and Subtitle (added first for layering)
+     // Title and Subtitle
      svg.append("text")
         .attr("x", width / 2)
-        .attr("y", 20)
+        .attr("y", 30) // Adjusted y position to make it more visible
         .attr("text-anchor", "middle")
         .style("font-size", "18px")
         .style("font-weight", "bold")
-        .attr("class", "title-container")
         .text("Gini Index by Country (Income Inequality)");
  
      svg.append("text")
         .attr("x", width / 2)
-        .attr("y", 40)
+        .attr("y", 50) // Adjusted y position to make it more visible
         .attr("text-anchor", "middle")
         .style("font-size", "12px")
         .style("fill", "gray")
-        .attr("class", "title-container")
         .text("Choropleth map showing income inequality across different countries");
  
-     // Projection and path
      const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
      const path = d3.geoPath().projection(projection);
  
-     // Updated color scale for better color contrast
      const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
  
-     // World map data (added after title/subtitle to layer below them)
      d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
        svg.selectAll("path")
           .data(world.features)
