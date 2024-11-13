@@ -38,27 +38,14 @@ function hideTooltip() {
 // Choropleth Map
 function createChoroplethMap() {
    loadData(() => {
-     const width = 1760, height = 700;
+     const width = 1920, height = 650;
      const svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height);
      const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.5]);
      const path = d3.geoPath().projection(projection);
      // Updated color scale for better color contrast
      const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
      // Title and Subtitle
-     svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", 15)
-        .attr("text-anchor", "middle")
-        .style("font-size", "20px")
-        .style("font-weight", "bold")
-        .text("Gini Index by Country (Income Inequality)");
-     svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", 30)
-        .attr("text-anchor", "middle")
-        .style("font-size", "15px")
-        .style("fill", "gray")
-        .text("Choropleth map showing income inequality across different countries");
+    
      // World map data
      d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
        svg.selectAll("path")
@@ -93,14 +80,11 @@ function createChoroplethMap() {
  }
  
 
- 
- 
- 
 // Bar Chart
 function createBarChart() {
   loadData(() => {
-    const width = 1700, height = 700;
-    const margin = { top: 50, right: 90, bottom: 180, left: 200 };
+    const width = 1850, height = 700;
+    const margin = { top: 50, right: 90, bottom: 180, left: 300 };
 
     const svg = d3.select("#barChart").append("svg")
                   .attr("width", width)
@@ -175,7 +159,7 @@ function createBarChart() {
     svg.append("text")
        .attr("class", "axis-label")
        .attr("x", -height / 2.5)
-       .attr("y", 150)
+       .attr("y", 250)
        .attr("transform", "rotate(-90)")
        .attr("text-anchor", "middle")
        .style("font-size", "20px")
@@ -192,28 +176,12 @@ function createBarChart() {
        .style("fill", "#333")
        .text("Country");
 
-    // Title
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 25)
-       .attr("text-anchor", "middle")
-       .style("font-size", "20px")
-       .style("font-weight", "bold")
-       .text("Bar Chart: Life Expectancy with Gini Index and Infant Mortality");
-
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 45)
-       .attr("text-anchor", "middle")
-       .style("font-size", "15px")
-       .style("fill", "gray")
-       .text("Sorted by Life Expectancy for Enhanced Comparison");
   });
 }
 
 function createScatterPlot() {
   loadData(() => {
-    const width = 1700, height = 600, margin = { top: 50, right: 100, bottom: 70, left: 100 };
+    const width = 1700, height = 600, margin = { top: 50, right: 100, bottom: 70, left: 300 };
 
     const svg = d3.select("#scatterPlot").append("svg")
                   .attr("width", width)
@@ -227,15 +195,6 @@ function createScatterPlot() {
     const colorScale = d3.scaleSequential(d3.interpolatePlasma) // Plasma has good contrast in lighter colors
                          .domain(d3.extent(globalData, d => d.Infant_Mortality));
 
-    // Title for the plot
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", margin.top / 2)
-       .attr("text-anchor", "middle")
-       .attr("class", "title")
-       .style("font-size", "25px")
-       .style("fill", "#663399")  // Dark purple for title
-       .text("Impact of Income Inequality on Life Expectancy with Infant Mortality");
 
     // Plotting circles with improved opacity
     svg.selectAll("circle")
@@ -264,8 +223,8 @@ function createScatterPlot() {
 
     // X-axis label
     svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", height - margin.bottom / 4.5)
+       .attr("x", width / 1.7)
+       .attr("y", height - margin.bottom / 5.5)
        .attr("text-anchor", "middle")
        .style("font-size", "20px")
        .text("Gini Index");
@@ -280,7 +239,7 @@ function createScatterPlot() {
     // Y-axis label
     svg.append("text")
        .attr("transform", "rotate(-90)")
-       .attr("y", margin.left / 1.5)
+       .attr("y", margin.left / 1.1)
        .attr("x", -height / 2)
        .attr("dy", "-1.5em")
        .attr("text-anchor", "middle")
@@ -313,7 +272,7 @@ function createScatterPlot() {
 // Line Chart
 function createLineChart() {
   loadData(() => {
-    const width = 1570, height = 550, margin = { top: 100, right: 30, bottom: 100, left: 280 };
+    const width = 1570, height = 700, margin = { top: 60, right: 30, bottom: 180, left: 360 };
     const svg = d3.select("#lineChart").append("svg")
                   .attr("width", width)
                   .attr("height", height);
@@ -376,34 +335,17 @@ function createLineChart() {
        })
        .on("mouseout", hideTooltip);
 
-    // Title and Subtitle
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", margin.top / 2.5)
-       .attr("text-anchor", "middle")
-       .style("font-size", "25px")
-       .style("font-weight", "bold")
-       .text("Line Chart: Infant Mortality by Country");
-
-    svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 70)
-       .attr("text-anchor", "middle")
-       .style("font-size", "20px")
-       .style("fill", "gray")
-       .text("Each point represents the infant mortality rate per 1000 live births");
-
     // Axis Labels
     svg.append("text")
-       .attr("x", width / 1.8)
-       .attr("y", height - 15)
+       .attr("x", width / 1.6)
+       .attr("y", height - 70)
        .attr("text-anchor", "middle")
        .style("font-size", "20px")
        .text("Country");
 
     svg.append("text")
-       .attr("x", -height / 2)
-       .attr("y", 200)
+       .attr("x", -height / 2.5)
+       .attr("y", 300)
        .attr("text-anchor", "middle")
        .attr("transform", "rotate(-90)")
        .style("font-size", "18px")
@@ -415,9 +357,9 @@ function createLineChart() {
   function createDualAxisChart() {
    loadData(() => {
        // Define margins
-       const margin = { top: 60, right: 70, bottom: 100, left: 280 };
-       const width = 1500 - margin.left - margin.right;
-       const height = 550 - margin.top - margin.bottom;
+       const margin = { top: 50, right: 70, bottom: 180, left: 280 };
+       const width = 1700 - margin.left - margin.right;
+       const height = 700 - margin.top - margin.bottom;
 
        // Create SVG container and apply margins
        const svg = d3.select("#mapChart") // Make sure this ID matches the HTML div
@@ -430,23 +372,6 @@ function createLineChart() {
        // Axis Colors
        const leftAxisColor = "#1f77b4";  // Blue for Life Expectancy
        const rightAxisColor = "#d62728"; // Red for Infant Mortality
-
-       // Title and Subtitle
-       svg.append("text")
-           .attr("x", (width + margin.left + margin.right) / 2.6)
-           .attr("y", -30)
-           .attr("text-anchor", "middle")
-           .style("font-size", "20px")
-           .style("font-weight", "bold")
-           .text("Dual-Axis Chart: Life Expectancy & Infant Mortality by Country");
-
-       svg.append("text")
-           .attr("x", (width + margin.left + margin.right) / 2.6)
-           .attr("y", -5)
-           .attr("text-anchor", "middle")
-           .style("font-size", "18px")
-           .style("fill", "gray")
-           .text("Comparing Life Expectancy and Infant Mortality across countries");
 
        // X-axis
        const xScale = d3.scaleBand()
