@@ -92,10 +92,6 @@ function createChoroplethMap() {
            .style("fill", "url(#legendGradient)")
            .style("stroke", "#ccc")
            .style("stroke-width", 0.5);
-     // Legend Scale
-     const legendScale = d3.scaleLinear().domain([0.2, 0.5]).range([0, legendWidth]);
-     const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(".2f"));
-     legend.append("g").attr("transform", `translate(0,${legendHeight})`).call(legendAxis);
    });
  }
 
