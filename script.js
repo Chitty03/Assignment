@@ -48,23 +48,6 @@ function createChoroplethMap() {
      // Updated color scale for better color contrast
      const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0.2, 0.5]);
  
-     // Title and Subtitle with increased y-position
-     svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 40) // Increased y position to move title down
-       .attr("text-anchor", "middle")
-       .style("font-size", "18px")
-       .style("font-weight", "bold")
-       .text("Gini Index by Country (Income Inequality)");
- 
-     svg.append("text")
-       .attr("x", width / 2)
-       .attr("y", 60) // Increased y position for subtitle
-       .attr("text-anchor", "middle")
-       .style("font-size", "12px")
-       .style("fill", "gray")
-       .text("Choropleth map showing income inequality across different countries");
- 
      // World map data
      d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(world => {
        svg.selectAll("path")
@@ -98,7 +81,7 @@ function createChoroplethMap() {
  
      // Improved Legend with adjusted position
      const legendWidth = 200, legendHeight = 10;
-     const legend = svg.append("g").attr("transform", `translate(${width - 220}, 80)`); // Moved legend slightly down
+     const legend = svg.append("g").attr("transform", `translate(${width - 220}, 20)`); // Adjusted position for legend
  
      // Gradient for legend
      const defs = svg.append("defs");
@@ -132,6 +115,7 @@ function createChoroplethMap() {
            .text("Gini Index");
    });
  }
+ 
  
 
 // Bar Chart
