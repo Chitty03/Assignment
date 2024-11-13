@@ -37,9 +37,6 @@ function hideTooltip() {
 }
 
 // Choropleth Map
-
-
-
 function createChoroplethMap() {
    loadData(() => {
      const width = 900, height = 500;
@@ -124,7 +121,6 @@ function createChoroplethMap() {
            .text("Gini Index");
    });
  }
- 
  
 // Bar Chart
 function createBarChart() {
