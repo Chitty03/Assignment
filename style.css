@@ -1,8 +1,6 @@
 /* General Styles */
 body {
   font-family: Arial, sans-serif;
-  background: url('BGBG.jpg') no-repeat center center fixed; /* Add background image */
-  background-size: cover;             /* Cover entire viewport */
   color: #333;
   margin: 0;
   padding: 0;
@@ -10,6 +8,12 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+/* Background for Index Page Only */
+.index-background {
+  background: url('path-to-your-image.jpg') no-repeat center center fixed; /* Add background image */
+  background-size: cover;             /* Cover entire viewport */
 }
 
 h1, h2 {
