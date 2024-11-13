@@ -40,7 +40,7 @@ h1, h2 {
 
 /* Parallax Background */
 .parallax-background {
-  background-image: url('path_to_your_image.jpeg'); /* Replace with actual path to your 3D JPEG file */
+  background-image: url('3D Animated Bars.jpeg'); /* Replace with actual path to your 3D JPEG file */
   background-attachment: fixed; /* Enables parallax effect */
   background-size: cover;
   background-position: center;
