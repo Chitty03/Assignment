@@ -1,36 +1,109 @@
-<style>
-  .index-container {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #e6f4e0;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    background-image: url('https://via.placeholder.com/1920x1080');
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 3em;
+    font-weight: bold;
+    color: #fff;
+    background: #333;
+    display: inline-block;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+
+.header p {
+    font-size: 1.2em;
+    color: #444;
+    margin-top: 10px;
+}
+
+.main-chart {
+    background-image: url('background-image.jpg'); /* Add your background image here */
     background-size: cover;
     background-position: center;
-  }
-
-  .content-box {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 30px;
-    border-radius: 10px;
+    padding: 40px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    color: white;
     text-align: center;
-    width: 300px;
-    color: white;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  }
+}
 
-  .content-box h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
-  }
+.chart-description {
+    margin-bottom: 20px;
+    font-size: 1em;
+    color: #e0e0e0;
+}
 
-  .chart-link a {
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bar-chart, .line-chart {
+    width: 80%;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 0 10px;
+}
+
+.chart-overview {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.chart-item {
+    width: 18%;
+    background: #333;
     color: white;
-    text-decoration: none;
-    background-color: #4a90e2;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 10px;
-  }
-</style>
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.chart-item h3 {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+.chart-circle {
+    width: 80px;
+    height: 80px;
+    background: #666;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0 auto 15px;
+}
